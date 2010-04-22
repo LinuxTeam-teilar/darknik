@@ -254,8 +254,7 @@ void menu(int epilogi){
 		case 1:
 			puts("Euxaristoume pou peksate to Game!\n"
 				   "\nCredits:\n"
-				   "\n\tProgrammer: Darknik\n"
-				   "\tGrapgics: RedGay\n"
+				   "\n\tDeveloper: Darknik\n"
 				   "\tProduction Manager: Etern4L\n"
 				   "\n\tOfficial Production\n"		
 				   "\t\tTei Larisas\n"
