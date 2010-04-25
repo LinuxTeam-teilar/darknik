@@ -18,11 +18,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define epipedo 1
-#define xp 20
+int epipedo=1;
+int xp=20;
 
 char name[20];
-int lvl=1,hp=10,str=10,xpxara=0,maxhp=10,pnti=5,dmg;	/*arxikes times*/
+int lvl=1,hp=7,str=5,def=5,xpxara=0,maxhp=7,pnti=0,dmg,coins=0;	/*arxikes times*/
+int restPrice=1;
 
 void menu(int);
 void lvlup();
@@ -79,7 +80,7 @@ int main () {
 					"***** Euresi exthrou *****\n"
 					"lvl antipalou:%d\n"
 					"Hp antipalou:%d\n"
-					"Dinami antipoalou:%d\n"
+					"Dinami antipalou:%d\n"
 					"***************************\n"
 					"Enarksi maxis....\n"
 					"pieste ena koumpi gia sinexia...",antlvl,anthp,antstr);
@@ -97,7 +98,9 @@ int main () {
 							system("clear");
 							puts("Epithesi...");
 							anthp-=dmg;
-							antdmg=(float)((rand()%10+7.0)/10.0)*antstr;
+							antdmg=(float)(((rand()%10+7.0)-def)/10.0)*antstr;
+							if(antdmg<0)
+								antdmg=(-1)*antdmg;
 							hp-=antdmg;
 							if (anthp<0) {
 								anthp=0;
@@ -118,22 +121,23 @@ int main () {
 							if (anthp<=0) {
 								flag=1;
 								system("clear");
-								puts("***** Sixaritiria kerdisate!!! *****\n"
-									 "pieste ena koumpi gia sinexia...\n");
+								printf("***** Sigxaritiria kerdisate %d nomismata!!! *****\n"
+									 "pieste ena koumpi gia sinexia...\n",antlvl+antstr);
 								if ((antlvl*3)+hp<=maxhp) {
-									hp+=antlvl*3;
+									hp+=antlvl*2;
 								}
 								else {
 									hp=maxhp;
 								}
 								xpxara+=antlvl*xp/epipedo;
+								coins=(antlvl+antstr);
 								lvlup();
 							}
 							if (hp<=0) {
 								flag=1;
 							}
 							break;
-					}
+				     	}
 					getchar();
 				} while (flag==0);
 				epilogi=1;
@@ -152,6 +156,9 @@ int main () {
 						case 2:
 							str+=addpoint();
 							break;
+						case 3:
+							def+=addpoint();
+							break;
 						case 9:
 							system("clear");
 							plirofories();
@@ -167,13 +174,27 @@ int main () {
 					if (pnti==0) {
 						flag=1;
 						system("clear");
-						puts("Den iparxoun aloi ponti gia prosthiki...\n"
+						puts("Den iparxoun alloi pontoi gia prosthiki...\n"
 							 "pieste ena koumpi gia sinexia...");
 						getchar();
 					}
 				}
 				epilogi=1;
 				break;
+			case 4:
+				system("clear");
+				if(coins>=restPrice*lvl){
+					coins-=restPrice*lvl;
+					hp=maxhp;
+					printf("HP:       %d\n"
+						    "Xrimata:  %d\n",hp,coins);
+				}else {
+					puts("Den exeis arketa xrimata!");
+				}
+				puts("pieste ena koumpi gia sinexia...\n");
+				getchar();
+				break;
+				
 			case 9:
 				system("clear");
 				puts("apothikeusi dedomenon....");
@@ -202,7 +223,7 @@ void lvlup(){
 		metritis*=2;
 	}
 	if (level!=lvl) {
-		pnti+=(level-lvl)*5;
+		pnti+=(level-lvl)*3;
 		system("clear");
 		printf("**********\n"
 			   "Level Up!!!\n"
@@ -247,6 +268,7 @@ void menu(int epilogi){
 				   "1->Efanisi pliroforion\n"
 				   "2->Maxi\n"
 				   "3->Prosthiki ponton\n"
+				   "4->Anazoogonisi\n"
 				   "9->Save Game\n"
 				   "**************************\n"
 				   "epilekste ena apo ta parapano:");
@@ -277,6 +299,7 @@ void menu(int epilogi){
 				   "Sas exoun mini %d pontoi...\n"
 				   "1->Hp\n"
 				   "2->Dinami\n"
+				   "3->Amyna\n"
 				   "0->Exit\n"
 				   "9->Plirofories xaraktira\n"
 				   "*****************************\n"
@@ -288,6 +311,12 @@ void menu(int epilogi){
 				   "2->loadgame\n"
 				   "*********************\n"
 				   "Epilekste ena pao ta parapano:");
+			break;
+		case 5:
+			puts("***** Rest *****\n"
+				 "\n"
+			
+			);
 			break;
 		default:
 			break;
@@ -301,9 +330,11 @@ void plirofories(){
 		   "lvl	:%d\n"
 		   "Hp	:%d\n"
 		   "Dinami	:%d\n"
+		   "Amina:%d\n"
 		   "Pontoi	:%d\n"
+		   "Xrimata:%d\n"
 		   "*********************************\n"
-		   "pieste ena koumpi gia sinexia...",name,lvl,hp,str,pnti);
+		   "pieste ena koumpi gia sinexia...",name,lvl,hp,str,def,pnti,coins);
 }
 
 int egiriepithesi(int epilogi){
@@ -331,7 +362,7 @@ int egiriepithesi(int epilogi){
 void save(){
 	FILE *save;
 	save=fopen(name, "w");
-	fprintf(save, "%d\n%d\n%d\n%d\n%d\n",lvl,hp,maxhp,str,pnti);
+	fprintf(save, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n",lvl,hp,maxhp,str,def,pnti,coins);
 	fclose (save);
 }
 
@@ -344,6 +375,6 @@ void load(){
 		scanf("%s",&name[0]);
 	} while (fopen(name, "r")==NULL);
 	load=fopen(name, "r");
-	fscanf(load, "%d %d %d %d %d",&lvl,&hp,&maxhp,&str,&pnti);
+	fscanf(load, "%d %d %d %d %d %d %d",&lvl,&hp,&maxhp,&str,&def,&pnti,&coins);
 	fclose(load);
 }
