@@ -481,15 +481,10 @@ void useitems(){
 		default:
 			break;
 	}
-	taksinomistsantas();
-}
-
-void taksinomistsantas(){
 	for (i=id-1; i<=tsantalast; i++) {
 		tsanta[i]=tsanta[i+1];
 	}
-	tsantalast-=1;
-}
+	tsantalast-=1;}
 
 void agora(){
 	FILE *store;
