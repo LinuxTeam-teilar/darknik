@@ -3,7 +3,6 @@
 #include <time.h>
 #include "uf.h"
 
-
 int epipedo=1;
 int xp=20;
 
@@ -85,9 +84,29 @@ int main (int argc, char *argv[]) {
 						case 0:
 							flag=1;
 							break;
+						case 1:
+							system("clear");   
+							if (tsantalast!=0) {
+								do {
+									valitsa();
+									printf("Epelekse pio antikimeno thes na xrisimopiisis:");
+									scanf("%d",&id);
+									system("clear");
+								} while (id>tsantalast);
+								itemid=tsanta[id-1];
+								if (id==0) {
+									break;
+								}
+								useitems();
+							}
+							else {
+								puts("Den uparxoun antikimena stin tsanta\n"
+									 "pieste ena koumpi gia sinexia...\n");
+							}
+							getchar();
+							break;
 						default:
 							system("clear");
-							puts("Epithesi...");
 							anthp-=dmg;
 							antdmg=(float)(((rand()%10+7.0)-def)/10.0)*antstr;
 							if(antdmg<0)
@@ -121,7 +140,7 @@ int main (int argc, char *argv[]) {
 									hp=maxhp;
 								}
 								xpxara+=antlvl*xp/epipedo;
-								coins+=lvl*antstr/epipedo;
+								coins+=lvl*rand()%3/epipedo;
 								lvlup();
 							}		
 							if (hp<=0) {
@@ -201,6 +220,9 @@ int main (int argc, char *argv[]) {
 									scanf("%d",&id);
 									system("clear");
 								} while (id>tsantalast);
+								if (id==0) {
+									break;
+								}
 								itemid=tsanta[id-1];
 								useitems();
 							}
@@ -315,8 +337,9 @@ void menu(int epilogi){
 			break;
 		case 2:
 			puts("********** Epithesis **********\n"
-				   "1->1h epithesi");
-			if(lvl>=3){ puts("2->2h epithesi");}
+					"1->Xrisi antikimenou\n"
+				   "2->1h epithesi");
+			if(lvl>=3){ puts("3->2h epithesi");}
 			puts("0->apoxorisi\n"
 				   "*******************************\n"
 				   "epelekse ena apo ta parapano:");
@@ -391,9 +414,12 @@ int egiriepithesi(int epilogi){
 			break;
 		case 1:
 			flag=1;
-			dmg=str;
 			break;
 		case 2:
+			flag=1;
+			dmg=str;
+			break;
+		case 3:
 			if (lvl>=3) {
 				flag=1;
 				dmg=str*1.5;
@@ -408,9 +434,10 @@ int egiriepithesi(int epilogi){
 void valitsa(){
 	FILE *store;
 	puts("********** Tsanta **********\n"
-		 "ID\tNAME");
+		 "ID\tNAME\n"
+		 "0\tExit");
 	for (i=0; i<tsantalast; i++) {
-		store=fopen("./store", "r");
+		store=fopen("store", "r");
 		fscanf(store, "%d",&iteminstore);
 		do {
 			fscanf(store, "%d %d %s \n",&itemid,&itemcoins,&itemname[0]);
@@ -466,7 +493,8 @@ void taksinomistsantas(){
 
 void agora(){
 	FILE *store;
-	store=fopen("./store", "r");
+	system("clear");
+	store=fopen("store", "r");
 	fscanf(store, "%d",&iteminstore);
 	do {
 		fscanf(store, "%d %d %s \n",&itemid,&itemcoins,&itemname[0]);
